@@ -44,9 +44,6 @@ router.delete(
   }
 );
 
-
-
-
 //GET USER
 router.get("/find/:id", verifyTokenAndAdmin, async (request, response) => {
   try {
@@ -59,16 +56,14 @@ router.get("/find/:id", verifyTokenAndAdmin, async (request, response) => {
   }
 });
 
-
-
 //GET ALL USERS
 router.get("/", verifyTokenAndAdmin, async (request, response) => {
   const query = request.query.new;
 
   try {
-    const users = query 
-        ? await User.find().sort({_id: -1}).limit(5)
-        : await User.find();
+    const users = query
+      ? await User.find().sort({ _id: -1 }).limit(5)
+      : await User.find();
 
     response.status(200).json(users);
   } catch (err) {
@@ -76,44 +71,36 @@ router.get("/", verifyTokenAndAdmin, async (request, response) => {
   }
 });
 
-
 //GET USER STATS
 
-router.get("/stats", verifyTokenAndAdmin, async (request, response) =>{
+router.get("/stats", verifyTokenAndAdmin, async (request, response) => {
+  const date = new Date();
 
-    const date = new Date();
+  //pegando o ultrimo ano
+  const lastYear = new Date(date.setFullYear(date.getFullYear() - 1));
 
-    //pegando o ultrimo ano
-    const lastYear = new Date(date.setFullYear(date.getFullYear() - 1))
+  try {
+    const data = await User.aggregate([
+      //verifica se foi criado acima do ano passado
+      { $match: { createdAt: { $gte: lastYear } } },
+      {
+        $project: {
+          //pegando o mês
+          month: { $month: "$createdAt" },
+        },
+      },
+      {
+        $group: {
+          _id: "$month",
+          total: { $sum: 1 },
+        },
+      },
+    ]);
 
-
-    try{
-
-
-        const data = await User.aggregate([
-            //verifica se foi criado acima do ano passado
-            {$match: { createdAt : {$gte: lastYear} } },
-            {
-                $project:{
-                    //pegando o mês
-                    month: {$month: "$createdAt"}
-                },
-            },
-            {
-                $group:{
-                    _id: "$month",
-                    total: {$sum: 1},
-                }
-            },
-        ]);
-
-        response.status(200).json(data);
-
-    }catch(err){
-        response.status(500).json(err);
-    }
-
-
-})
+    response.status(200).json(data);
+  } catch (err) {
+    response.status(500).json(err);
+  }
+});
 
 module.exports = router;

@@ -10,41 +10,28 @@ const router = require("express").Router();
 
 //CREATE
 
-router.post("/", verifyTokenAndAdmin, async (req,res)=>{
-    const newProduct = new Product(request.body)
-
-    try{
-
-        const savedProduct = await newProduct.save();
-        response.status(200).json(savedProduct);
-
-    }catch(err){
-        response.status(500).json(err)
-    }
-
-})
-
-
-
-
-//UPDATE
-router.put("/:id", verifyTokenAndAuthorization, async (request, response) => {
-  if (request.body.password) {
-    request.body.password = CryptoJS.AES.encrypt(
-      request.body.password,
-      process.env.PASSWORD_SEC
-    ).toString();
-  }
+router.post("/", verifyTokenAndAdmin, async (request, response) => {
+  const newProduct = new Product(request.body);
 
   try {
-    const updatedUser = await User.findByIdAndUpdate(
+    const savedProduct = await newProduct.save();
+    response.status(200).json(savedProduct);
+  } catch (err) {
+    response.status(500).json(err);
+  }
+});
+
+//UPDATE
+router.put("/:id", verifyTokenAndAdmin, async (request, response) => {
+  try {
+    const updatedProduct = await Product.findByIdAndUpdate(
       request.params.id,
       {
         $set: request.body,
       },
       { new: true }
     );
-    response.status(200).json(updatedUser);
+    response.status(200).json(updatedProduct);
   } catch (err) {
     response.status(500).json(err);
   }
@@ -53,27 +40,24 @@ router.put("/:id", verifyTokenAndAuthorization, async (request, response) => {
 //DELETE
 router.delete(
   "/:id",
-  verifyTokenAndAuthorization,
+  verifyTokenAndAdmin,
   async (request, response) => {
     try {
-      await User.findOneAndDelete(request.params.id);
-      response.status(200).json("Usuário deletado corretamente");
+      await Product.findOneAndDelete(request.params.id);
+      response.status(200).json("Produto deletado corretamente");
     } catch (err) {
       response.status(500).json(err);
     }
   }
 );
 
+//GET PRODUCTS
 
-
-
-//GET USER
-router.get("/find/:id", verifyTokenAndAdmin, async (request, response) => {
+//sem validação, todo mundo pode ver os produtos
+router.get("/find/:id", async (request, response) => {
   try {
-    const user = await User.findById(request.params.id);
-    const { password, ...others } = user._doc;
-
-    response.status(200).json(others);
+    const produto = await Product.findById(request.params.id);
+    response.status(200).json(produto);
   } catch (err) {
     response.status(500).json(err);
   }
@@ -82,58 +66,30 @@ router.get("/find/:id", verifyTokenAndAdmin, async (request, response) => {
 
 
 //GET ALL USERS
-router.get("/", verifyTokenAndAdmin, async (request, response) => {
-  const query = request.query.new;
+router.get("/", async (request, response) => {
+  const qNew = request.query.new;
+  const qCategory = request.query.category;
 
   try {
-    const users = query 
-        ? await User.find().sort({_id: -1}).limit(5)
-        : await User.find();
+    let produtos;
 
-    response.status(200).json(users);
+    if (qNew){
+      produtos = await Product.find().sort({createdAt: -1}).limit(5);
+    }else if (qCategory){
+      produtos = await Product.find({
+        categorias:{
+          $in: [qCategory],
+        },
+      });
+    }else{
+      produtos = await Product.find();
+    }
+
+    response.status(200).json(produtos);
   } catch (err) {
     response.status(500).json(err);
   }
 });
 
-
-//GET USER STATS
-
-router.get("/stats", verifyTokenAndAdmin, async (request, response) =>{
-
-    const date = new Date();
-
-    //pegando o ultrimo ano
-    const lastYear = new Date(date.setFullYear(date.getFullYear() - 1))
-
-
-    try{
-
-
-        const data = await User.aggregate([
-            //verifica se foi criado acima do ano passado
-            {$match: { createdAt : {$gte: lastYear} } },
-            {
-                $project:{
-                    //pegando o mês
-                    month: {$month: "$createdAt"}
-                },
-            },
-            {
-                $group:{
-                    _id: "$month",
-                    total: {$sum: 1},
-                }
-            },
-        ]);
-
-        response.status(200).json(data);
-
-    }catch(err){
-        response.status(500).json(err);
-    }
-
-
-})
 
 module.exports = router;
