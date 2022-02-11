@@ -11,7 +11,7 @@ router.post("/register", async (req,res) => {
     const newUser = new User({
         username: req.body.username,
         email: req.body.email,
-        password: CryptoJS.AES.encrypt(req.body.password, process.env.PASSWORD_SEC).toString(),        
+        password: CryptoJS.AES.encrypt(req.body.password, process.env.PASSWORD_SEC).toString(),                
     });
 
     try {
@@ -42,6 +42,7 @@ router.post("/login", async (req,res) => {
                 {
                     id:user.id, 
                     isAdmin: user.isAdmin,
+                    email: user.email
                 },
                 process.env.JWT_SEC,
                 {expiresIn:"3d"}
@@ -61,5 +62,3 @@ router.post("/login", async (req,res) => {
 
 module.exports = router;
 
-
-module.exports = router

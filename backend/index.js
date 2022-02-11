@@ -8,6 +8,7 @@ const cartRoute = require("./routes/cart");
 const orderRoute = require("./routes/order");
 const stripeRoute = require("./routes/stripe");
 const authRoute = require("./routes/auth");
+
 const cors = require("cors");
 
 
