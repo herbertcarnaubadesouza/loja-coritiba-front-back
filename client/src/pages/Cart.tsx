@@ -1,15 +1,25 @@
 import { Add, Remove } from "@material-ui/icons";
+import { useRouter } from "next/router";
+import Router from 'next/router'
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { mobile } from "../responsive";
+import StripeCheckout from "react-stripe-checkout";
+import { useState } from "react";
+import { useEffect } from "react";
+import {userRequest} from "../requestMethod"
+
+
+const KEY = process.env.NEXT_PUBLIC_REACT_APP_STRIPE;
 
 const Container = styled.div``;
 
 const Wrapper = styled.div`
   padding: 20px;
-  ${mobile({padding:"10px"})}
+  ${mobile({ padding: "10px" })}
 `;
 
 const Title = styled.h1`
@@ -35,7 +45,7 @@ const TopButton = styled.button<{ styling?: string }>`
 `;
 
 const TopTexts = styled.div`
-  ${mobile({display:"none"})}
+  ${mobile({ display: "none" })}
 `;
 
 const TopText = styled.span`
@@ -47,7 +57,7 @@ const TopText = styled.span`
 const Bottom = styled.div`
   display: flex;
   justify-content: space-between;
-  ${mobile({flexDirection:"column"})}
+  ${mobile({ flexDirection: "column" })}
 `;
 
 const Info = styled.div`
@@ -57,7 +67,7 @@ const Info = styled.div`
 const Product = styled.div`
   display: flex;
   justify-content: space-between;
-  ${mobile({flexDirection:"column"})}
+  ${mobile({ flexDirection: "column" })}
 `;
 
 const ProductDetail = styled.div`
@@ -99,19 +109,19 @@ const PriceDetails = styled.div`
 const ProductAmountContainer = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 20px;  
+  margin-bottom: 20px;
 `;
 
 const ProductAmount = styled.div`
   font-size: 24px;
   margin: 5px;
-  ${mobile({margin:"5px 15px"})}
+  ${mobile({ margin: "5px 15px" })}
 `;
 
 const ProductPrice = styled.div`
   font-size: 30px;
   font-weight: 200;
-  ${mobile({marginBottom:"20px"})}
+  ${mobile({ marginBottom: "20px" })}
 `;
 
 const Hr = styled.hr`
@@ -152,8 +162,39 @@ const SummaryButton = styled.button`
   font-weight: 600;
 `;
 
-
 const Cart = () => {
+  const cart = useSelector((state) => state.cart);
+  const[stripeToken,setStripeToken] = useState<any>();
+  
+
+  const onToken = (token:any)=>{
+    setStripeToken(token);
+  }
+
+  
+  const router = useRouter();
+  useEffect(() =>{
+    
+    const makeRequest = async () =>{
+      try{
+        const response = await userRequest.post("/checkout/payment",{
+          tokenId: stripeToken.id,
+          amount: cart.total * 100,              
+        });
+
+        response.data && console.log(response.data)
+        Router.push({
+          pathname: '/Success',
+          query: {...response.data , ...cart},
+          
+        });
+      }catch{
+
+      }
+    }
+    stripeToken && cart.total>=1 && makeRequest();
+  },[stripeToken, cart.total, router])
+
   return (
     <Container>
       <Navbar />
@@ -170,64 +211,40 @@ const Cart = () => {
         </Top>
         <Bottom>
           <Info>
-            <Product>
-              <ProductDetail>
-                <Image src="./images/jordan.png" />
-                <Details>
-                  <ProductName>
-                    <b>Product:</b> JESSIE THUNDER SHOES
-                  </ProductName>
-                  <ProductId>
-                    <b>ID:</b> 654541454
-                  </ProductId>
-                  <ProductColor color="darkblue" />
-                  <ProductSize>
-                    <b>Size:</b> 37.5
-                  </ProductSize>
-                </Details>
-              </ProductDetail>
-              <PriceDetails>
-                <ProductAmountContainer>
-                  <Add />
-                  <ProductAmount>2</ProductAmount>
-                  <Remove />
-                </ProductAmountContainer>
-                <ProductPrice>$ 30</ProductPrice>
-              </PriceDetails>
-            </Product>
-
-            <Hr />
-            <Product>
-              <ProductDetail>
-                <Image src="./images/ball1.png" />
-                <Details>
-                  <ProductName>
-                    <b>Product:</b> JESSIE THUNDER SHOES
-                  </ProductName>
-                  <ProductId>
-                    <b>ID:</b> 654541454
-                  </ProductId>
-                  <ProductColor color="brown" />
-                  <ProductSize>
-                    <b>Size:</b>Adult
-                  </ProductSize>
-                </Details>
-              </ProductDetail>
-              <PriceDetails>
-                <ProductAmountContainer>
-                  <Add />
-                  <ProductAmount>2</ProductAmount>
-                  <Remove />
-                </ProductAmountContainer>
-                <ProductPrice>$ 30</ProductPrice>
-              </PriceDetails>
-            </Product>
+            {cart.products.map((product : any) => (
+              <Product key={product._id}>
+                <ProductDetail>
+                  <Image src={product.imagem} />
+                  <Details>
+                    <ProductName>
+                      <b>Product:</b> {product.titulo}
+                    </ProductName>
+                    <ProductId>
+                      <b>ID:</b> {product._id}
+                    </ProductId>
+                    <ProductColor color={product.cor} />
+                    <ProductSize>
+                      <b>Size:</b> {product.tamanho}
+                    </ProductSize>
+                  </Details>
+                </ProductDetail>
+                <PriceDetails>
+                  <ProductAmountContainer>
+                    <Add />
+                    <ProductAmount>{product.quantity}</ProductAmount>
+                    <Remove />
+                  </ProductAmountContainer>
+                  <ProductPrice>$ {product.preco * product.quantity}</ProductPrice>
+                </PriceDetails>
+              </Product>
+            ))}
+            <Hr />            
           </Info>
           <Summary>
             <SummaryTitle>ORDER SUMMARY</SummaryTitle>
             <SummaryItem>
               <SummaryItemText>Subtotal</SummaryItemText>
-              <SummaryItemPrice>$ 80</SummaryItemPrice>
+              <SummaryItemPrice>$ {cart.total}</SummaryItemPrice>
             </SummaryItem>
             <SummaryItem>
               <SummaryItemText>Estimated Shipping</SummaryItemText>
@@ -239,9 +256,22 @@ const Cart = () => {
             </SummaryItem>
             <SummaryItem type="total">
               <SummaryItemText>Total</SummaryItemText>
-              <SummaryItemPrice>$ 80</SummaryItemPrice>
+              <SummaryItemPrice>$ {cart.total}</SummaryItemPrice>
             </SummaryItem>
-            <SummaryButton>CHECKOUT NOW</SummaryButton>
+            <StripeCheckout
+              name="Loja Coxa"
+              image="https://avatars.githubusercontent.com/u/1486366?v=4"
+              billingAddress
+              shippingAddress
+              description={`Your total is $${cart.total}`}
+              amount={cart.total*100}
+              token={onToken}              
+              stripeKey={KEY ? KEY : ""}
+              data-locale="pt-BR"
+              
+            >
+              <SummaryButton>CHECKOUT NOW</SummaryButton>
+            </StripeCheckout>
           </Summary>
         </Bottom>
       </Wrapper>

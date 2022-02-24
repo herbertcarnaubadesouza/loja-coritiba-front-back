@@ -84,8 +84,7 @@ const Payment = styled.img`
 
 const Footer = ({params} : FooterColor) => {
   return (
-    <Container background-color = {params}>
-      {console.log(params)}      
+    <Container background-color = {params}>        
       <Left>
         <Logo>CORITIBA</Logo>
         <Desc>
@@ -130,7 +129,7 @@ const Footer = ({params} : FooterColor) => {
         <ContactItem><Phone style={{marginRight :"10px"}} />+ 1 234 56 78</ContactItem>
         <ContactItem><MailOutline style={{marginRight :"10px"}} /> contact@lama.dev</ContactItem>
 
-        <Payment src="./images/payment.png" />
+        <Payment src="/images/payment.png" />
       </Right>
     </Container>
   );

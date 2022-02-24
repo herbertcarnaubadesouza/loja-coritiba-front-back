@@ -1,11 +1,12 @@
 import { FavoriteBorderOutlined, SearchOutlined, ShoppingCartOutlined } from "@material-ui/icons";
+import Link from "next/link";
 import styled from "styled-components";
 
 
 interface ProductItemProps {
-    item: {
-        id: number;
-        img: string;        
+    item: {        
+        imagem: string;  
+        _id: number;      
     }
 }
 
@@ -75,16 +76,19 @@ const Icon = styled.div`
 
 
 const SingleProduct = (item : ProductItemProps) => {
+    
   return (
       <Container>
         <Circle />
-        <Image src={item.item.img} />
+        <Image src={item.item.imagem} />
         <Info>
             <Icon>
                 <ShoppingCartOutlined/>
             </Icon>
             <Icon>
+            <Link href={`/product/${item.item._id}`}>
                 <SearchOutlined/>
+            </Link>
             </Icon>
             <Icon>
                 <FavoriteBorderOutlined/>

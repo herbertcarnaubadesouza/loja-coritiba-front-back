@@ -1,13 +1,19 @@
 import { Add, Remove } from "@material-ui/icons";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Announcement from "../../components/Announcement";
 import Footer from "../../components/Footer";
 import Navbar from "../../components/Navbar";
 import Newsletter from "../../components/Newsletter";
 import { mobile } from "../../responsive";
+import { publicRequest } from "../../requestMethod";
+import { addProduct } from "../../redux/cartRedux";
+import { useDispatch } from "react-redux";
 
 const Container = styled.div`
 `;
+
 const Wrapper = styled.div`
     padding: 50px;
     display:flex;
@@ -119,51 +125,105 @@ const Button = styled.button`
 
 
 
-
+interface Product{
+       
+        [key: string]: any;
+        titulo: string;
+        _id: number;
+        imagem: string;
+        categorias: Array<string>;
+        tamanho: Array<string>;
+        cor: Array<string>;
+        preco: number;
+        inStock: Boolean;
+        createdAt: string;          
+   
+}
 
 const Product = () => {
+
+    const router = useRouter();
+    const id = router.query.id;
+    
+    const[product, setProduct] = useState<Product | undefined>(undefined);
+    const[quantity, setQuantity] = useState<number | undefined>(1);
+    
+    const[color, setColor] = useState<string | undefined>("");
+    const[size, setSize] = useState<string | undefined>("");
+
+    const dispatch = useDispatch()
+    
+    useEffect(() =>{
+        const getProduct = async () =>{
+            try{
+                const response = await publicRequest.get(`/products/find/${id}`);
+                setProduct(response.data);
+                
+            }catch{
+
+            }
+        } 
+        getProduct()
+    },[id])    
+
+
+    const handleQuantity = (type : "dec" | "inc") =>{
+        if(type === "dec" && quantity != null){
+            if(quantity > 0){
+                setQuantity(quantity - 1)
+            }
+        }else{
+            if(quantity != null){
+                setQuantity(quantity + 1)
+            }
+        }
+    }
+
+    const handleClick = () =>{
+        if(product != null && quantity != null){            
+            dispatch(
+                addProduct({...product, quantity, color, size})
+            )      
+        }
+    };
+
   return (
       <Container>
           <Navbar />
           <Announcement />
           <Wrapper>
               <ImgContainer>
-                <Image src ="./images/jordan.png" />
+                <Image src ={product?.imagem} /> 
               </ImgContainer>
               <InfoContainer>
-                  <Title>Denim Jumpsuit</Title>
+                  <Title>{product?.titulo}</Title>
                   <Desc>
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. 
-                    Vitae magnam ipsa autem excepturi architecto quas officiis,
-                    asperiores nobis accusamus, quod atque consequuntur
-                    eveniet tempora voluptatem itaque sint, earum molestias quos.
+                     {product?.descricao}
                     </Desc>
-                  <Price>$ 20</Price>
+                  <Price>$ {product?.preco}</Price>
                   <FilterContainer>
                       <Filter>
                           <FilterTitle>Color</FilterTitle>
-                          <FilterColor color="black" />
-                          <FilterColor color="darkgreen" />
-                          <FilterColor color="gray" />
+                          {product?.cor.map(c => (                              
+                            <FilterColor color={c} key={c} onClick={() => setColor(c)}/>
+                          ))}
                       </Filter>
                       <Filter>
                           <FilterTitle>Size</FilterTitle>
-                          <FilterSize>
-                              <FilterSizeOption>XS</FilterSizeOption>
-                              <FilterSizeOption>S</FilterSizeOption>
-                              <FilterSizeOption>M</FilterSizeOption>
-                              <FilterSizeOption>L</FilterSizeOption>
-                              <FilterSizeOption>XL</FilterSizeOption>
+                          <FilterSize onChange={(e) => setSize(e.target.value)}>
+                                {product?.tamanho.map(t => (                              
+                              <FilterSizeOption key={t}>{t}</FilterSizeOption>
+                                ))}                              
                           </FilterSize>
                       </Filter>
                   </FilterContainer>
                   <AddContainer>
                       <AmountContainer>
-                        <Remove/>
-                        <Amount>1</Amount>
-                        <Add />                          
+                        <Remove onClick={() => handleQuantity("dec") }/>
+                        <Amount>{quantity}</Amount>
+                        <Add onClick={() => handleQuantity("inc") }/>                          
                       </AmountContainer>
-                      <Button>ADD TO CART</Button>
+                      <Button onClick={handleClick}>ADD TO CART</Button>
                   </AddContainer>
               </InfoContainer>
           </Wrapper>
