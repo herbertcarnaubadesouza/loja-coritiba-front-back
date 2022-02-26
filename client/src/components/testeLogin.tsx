@@ -1,15 +1,6 @@
-import React, { useRef, useState } from "react";
 import styled from "styled-components";
-import { faEnvelope, faLock, faUser } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faFacebookF,
-  faGoogle,
-  faLinkedinIn,
-  faTwitter,
-} from "@fortawesome/free-brands-svg-icons";
 
-const Container = styled.div`
+export const Container = styled.div`
   position: relative;
   width: 100%;
   min-height: 100vh;
@@ -75,7 +66,7 @@ const Container = styled.div`
   }
 `;
 
-const FormsContainer = styled.div`
+export const FormsContainer = styled.div`
   position: absolute;
   width: 100%;
   height: 100%;
@@ -83,7 +74,7 @@ const FormsContainer = styled.div`
   left: 0;
 `;
 
-const PanelsContainer = styled.div`
+export const PanelsContainer = styled.div`
   position: absolute;
   width: 100%;
   height: 100%;
@@ -98,7 +89,7 @@ const PanelsContainer = styled.div`
   }
 `;
 
-const SigninSignup = styled.div<{ signUp: boolean }>`
+export const SigninSignup = styled.div<{ signUp: boolean }>`
   position: absolute;
   top: 50%;
   left: 75%;
@@ -131,7 +122,7 @@ const SigninSignup = styled.div<{ signUp: boolean }>`
   
 `;
 
-const SignInForm = styled.form<{ signUp: boolean }>`
+export const SignInForm = styled.form<{ signUp: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -153,7 +144,7 @@ const SignInForm = styled.form<{ signUp: boolean }>`
   }
 `;
 
-const SignUpForm = styled.form<{ signUp: boolean }>`
+export const SignUpForm = styled.form<{ signUp: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -177,13 +168,13 @@ const SignUpForm = styled.form<{ signUp: boolean }>`
   }
 `;
 
-const Title = styled.h2`
+export const Title = styled.h2`
   font-size: 2.2rem;
   color: #444;
   margin-bottom: 10px;
 `;
 
-const InputField = styled.div`
+export const InputField = styled.div`
   max-width: 380px;
   width: 100%;
   height: 55px;
@@ -210,14 +201,14 @@ const InputField = styled.div`
   }
 `;
 
-const I = styled.div`
+export const I = styled.div`
   text-align: center;
   line-height: 55px;
   color: #acacac;
   font-size: 1.1rem;
 `;
 
-const BtnSolid = styled.input`
+export const BtnSolid = styled.input`
   width: 150px;
   height: 49px;
   border: none;
@@ -236,17 +227,17 @@ const BtnSolid = styled.input`
   }
 `;
 
-const P = styled.p`
+export const P = styled.p`
   padding: 0.7rem 0;
   font-size: 1rem;
 `;
 
-const SocialMedia = styled.div`
+export const SocialMedia = styled.div`
   display: flex;
   justify-content: center;
 `;
 
-const SocialIcon = styled.a`
+export const SocialIcon = styled.a`
   height: 46px;
   width: 46px;
   border: 1px solid #333;
@@ -266,7 +257,7 @@ const SocialIcon = styled.a`
   }
 `;
 
-const LeftPanel = styled.div<{ signUp: boolean }>`
+export const LeftPanel = styled.div<{ signUp: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -292,7 +283,7 @@ const LeftPanel = styled.div<{ signUp: boolean }>`
   }
 `;
 
-const RightPanel = styled.div<{ signUp: boolean }>`
+export const RightPanel = styled.div<{ signUp: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -318,7 +309,7 @@ const RightPanel = styled.div<{ signUp: boolean }>`
   }
 `;
 
-const ContentLeft = styled.div<{ signUp: boolean }>`
+export const ContentLeft = styled.div<{ signUp: boolean }>`
   color: #fff;
   transition: 0.9s 0.6s ease-in-out;
 
@@ -344,13 +335,13 @@ const ContentLeft = styled.div<{ signUp: boolean }>`
     transition: 0.9s 0.8s ease-in-out;
 
     h3{
-      font-size: 1.2rem;
+      font-size: 1.5rem;      
     }
 
-    
+
     p{
-      font-size: 0.7rem;
-      padding: 0.5rem 0;
+      font-size: 0.9rem;
+      
     }
 
     transform: ${({ signUp }) =>
@@ -360,11 +351,11 @@ const ContentLeft = styled.div<{ signUp: boolean }>`
 
 
   @media (max-width: 570px) {
-    padding: 0.5rem 1rem;
+    padding: 5px;
   }
 `;
 
-const ContentRight = styled.div<{ signUp: boolean }>`
+export const ContentRight = styled.div<{ signUp: boolean }>`
   color: #fff;
   transition: 0.9s 0.6s ease-in-out;
 
@@ -394,13 +385,13 @@ const ContentRight = styled.div<{ signUp: boolean }>`
 
 
     h3{
-      font-size: 1.2rem;
+      font-size: 1.5rem;      
     }
 
 
     p{
-      font-size: 0.7rem;
-      padding: 0.5rem 0;
+      font-size: 0.9rem;
+      padding: 5px;
     }
   }
 
@@ -411,7 +402,7 @@ const ContentRight = styled.div<{ signUp: boolean }>`
 
 `;
 
-const BtnTransparentin = styled.button`
+export const BtnTransparentin = styled.button`
   margin: 0;
   background: none;
   border: 2px solid #fff;
@@ -425,12 +416,12 @@ const BtnTransparentin = styled.button`
   @media (max-width: 870px) {
     //padrão
     width: 110px;
-    height: 35px;
-    font-size: 0.7rem;
+    height: 45px;
+    font-size: 0.8rem;
   }
 `;
 
-const BtnTransparentup = styled.button`
+export const BtnTransparentup = styled.button`
   margin: 0;
   background: none;
   border: 2px solid #fff;
@@ -445,13 +436,13 @@ const BtnTransparentup = styled.button`
   @media (max-width: 870px) {
     //padrão
     width: 110px;
-    height: 35px;
-    font-size: 0.7rem;
+    height: 45px;
+    font-size: 0.8rem;
   }
 
 `;
 
-const ImageLogin = styled.img<{ signUp: boolean }>`
+export const ImageLogin = styled.img<{ signUp: boolean }>`
   width: 100%;
   transition: 1.1s 0.4s ease-in-out;
 
@@ -474,7 +465,7 @@ const ImageLogin = styled.img<{ signUp: boolean }>`
   }
 `;
 
-const ImageRegister = styled.img<{ signUp: boolean }>`
+export const ImageRegister = styled.img<{ signUp: boolean }>`
   width: 100%;
   height: 65%;
   transition: 1.1s 0.4s ease-in-out;
@@ -497,134 +488,3 @@ const ImageRegister = styled.img<{ signUp: boolean }>`
     display: none;
   }
 `;
-
-const index = () => {
-  const [isSignUpMode, setSignUpMode] = useState(false);
-
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  const handleClickSignUp = () => {
-    containerRef.current?.classList.add("sign-up-mode");
-    setSignUpMode(true);
-  };
-
-  const handleClickSignIn = () => {
-    containerRef.current?.classList.remove("sign-up-mode");
-    setSignUpMode(false);
-  };
-
-  return (
-    <Container ref={containerRef}>
-      <FormsContainer>
-        <SigninSignup signUp={isSignUpMode}>
-          <SignInForm signUp={isSignUpMode}>
-            <Title>Login In</Title>
-            <InputField>
-              <I>
-                <FontAwesomeIcon icon={faUser} />
-              </I>
-              <input type="text" placeholder="Usuário" />
-            </InputField>
-            <InputField>
-              <I>
-                <FontAwesomeIcon icon={faLock} />
-              </I>
-              <input type="password" placeholder="Senha" />
-            </InputField>
-            <BtnSolid type="submit" value="Entrar"></BtnSolid>
-
-            <P>Ou entre pelas redes sociais</P>
-
-            <SocialMedia>
-              <SocialIcon>
-                <FontAwesomeIcon icon={faFacebookF} />
-              </SocialIcon>
-              <SocialIcon>
-                <FontAwesomeIcon icon={faTwitter} />
-              </SocialIcon>
-              <SocialIcon>
-                <FontAwesomeIcon icon={faGoogle} />
-              </SocialIcon>
-              <SocialIcon>
-                <FontAwesomeIcon icon={faLinkedinIn} />
-              </SocialIcon>
-            </SocialMedia>
-          </SignInForm>
-
-          {/* REGISTER */}
-          <SignUpForm signUp={isSignUpMode}>
-            <Title>Bem-Vindo</Title>
-            <InputField>
-              <I>
-                <FontAwesomeIcon icon={faUser} />
-              </I>
-              <input type="text" placeholder="Usuário" />
-            </InputField>
-            <InputField>
-              <I>
-                <FontAwesomeIcon icon={faEnvelope} />
-              </I>
-              <input type="text" placeholder="Email" />
-            </InputField>
-            <InputField>
-              <I>
-                <FontAwesomeIcon icon={faLock} />
-              </I>
-              <input type="password" placeholder="Senha" />
-            </InputField>
-            <BtnSolid type="submit" value="Cadastrar"></BtnSolid>
-
-            <P>Cadastre-se pelas redes sociais</P>
-
-            <SocialMedia>
-              <SocialIcon>
-                <FontAwesomeIcon icon={faFacebookF} />
-              </SocialIcon>
-              <SocialIcon>
-                <FontAwesomeIcon icon={faTwitter} />
-              </SocialIcon>
-              <SocialIcon>
-                <FontAwesomeIcon icon={faGoogle} />
-              </SocialIcon>
-              <SocialIcon>
-                <FontAwesomeIcon icon={faLinkedinIn} />
-              </SocialIcon>
-            </SocialMedia>
-          </SignUpForm>
-        </SigninSignup>
-      </FormsContainer>
-
-      <PanelsContainer>
-        <LeftPanel signUp={isSignUpMode}>
-          <ContentLeft signUp={isSignUpMode}>
-            <h3>Primeira vez ?</h3>
-            <p>
-              Faça parte do maior time de basquete de Curitiba! Viva o esporte!
-              Viva o basquete! Viva o Coxa!
-            </p>
-            <BtnTransparentup onClick={handleClickSignUp} id="sign-ip-btn">
-              Cadastar
-            </BtnTransparentup>
-          </ContentLeft>
-          <ImageRegister signUp={isSignUpMode} src="images/greek.svg" alt="" />
-        </LeftPanel>
-
-        <RightPanel signUp={isSignUpMode}>
-          <ContentRight signUp={isSignUpMode}>
-            <h3>Já é um de nós ?</h3>
-            <p>
-              Bem-Vindo de volta Coxa Branca! Vamos voltar para onde
-              estávamos! Viva o Coxa!
-            </p>
-            <BtnTransparentin onClick={handleClickSignIn} id="sign-up-btn">
-              Entrar
-            </BtnTransparentin>
-          </ContentRight>
-          <ImageLogin signUp={isSignUpMode} src="images/gameday.svg" alt="" />
-        </RightPanel>
-      </PanelsContainer>
-    </Container>
-  );
-};
-
-export default index;

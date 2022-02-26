@@ -1,14 +1,14 @@
 export const sliderItems = [
     {
       id: 1,
-      img: "https://lh3.googleusercontent.com/pw/AM-JKLU3eSwYIrdSWg5l5_WSZZ9UMxAKdLmWtqZ_PqxsYg4tKM2xiRxoKt2_637uhvN_dujGZsm4e0IlbwjQB-szbjf0Zd_wCJAAkMAQ5Du0tULNSmnkzEshy76ZiDSC2tkPliPcDW2JIuvFsNlUcN9EA5w=w1302-h937-no?authuser=2",
+      img: "/images/FotoJao.png",
       title: "SUMMER SALE",
       desc: "DON'T COMPROMISE ON STYLE! GET FLAT 30% OFF FOR NEW ARRIVALS.",
       bg: "f5fafd",
     },
     {
       id: 2,
-      img: "https://lh3.googleusercontent.com/pw/AM-JKLUj1aUDCT_pghcCHBFUfisVXRdALN4kUygY8VN41O2eHzbO3cUN0m24xr0xzx23zMci5QiwrO1NcjN3NJeM8Ff43UWSZ1VJwpyyKt_nTieNMTd5zmYee_5lx3IVSFzfrNxXK73ukCiIN2je_QQNDOI=w1215-h937-no?authuser=2",
+      img: "/images/Kaila.png",
       title: "AUTUMN COLLECTION",
       desc: "DON'T COMPROMISE ON STYLE! GET FLAT 30% OFF FOR NEW ARRIVALS.",
       bg: "ecfff9",
@@ -26,19 +26,19 @@ export const sliderItems = [
   export const categories = [
     {
       id: 1,
-      img: "https://lh3.googleusercontent.com/pw/AM-JKLVVE46kwhdth7__Wxw1uki1oZNfzHja0Y249_bIqyIrlPM1ihEZBweEnOZtGCZTUUPKiDrjQyT4mgquTF24nCb7sdUOB6wPMBcgrXW2RLa2cEJt2AXtuhvqKzyuZjQRhdoCeV2rv8QXqHNZ6s72zso=w624-h937-no?authuser=2",
+      img: "images/tshirt.png",
       title: "SHIRT STYLE!",
       cat:"woman"
     },
     {
       id: 2,
-      img: "https://lh3.googleusercontent.com/pw/AM-JKLVQCFwbSAz7NfH_x2tY9ZRBL5EeVg5tH3QlytC9b_mjywVDqdl9uYYKljw33g9_5WF9bU7Lc_5ekWJXvP8lE6QNiFdWWCKKVblluKUNT30Sg0MV49PRZGRDLlgfF0TddBP6enFh0ajEzki0ag2EKDs=s937-no?authuser=2",
+      img: "images/tshirt2.png",
       title: "LOUNGEWEAR LOVE",
       cat:"man"
     },
     {
       id: 3,
-      img: "https://lh3.googleusercontent.com/pw/AM-JKLXizZ4Yu1I313Y3O41TrJSpvHHNih4YXHQ02j-gAiiTy7ut1zQNuHxmyzeUxwo4OCJOZXzeWuXjeP8rwFqri9uJ25mcIy0cBLVstSJCP82qSBLhgQ6l72OmI_XZgqzEOIzq-p89GtcfMPCdRxD--6U=s937-no?authuser=2",
+      img: "images/tshirt3.png",
       title: "LIGHT JACKETS",
       cat:"jeans"
     },

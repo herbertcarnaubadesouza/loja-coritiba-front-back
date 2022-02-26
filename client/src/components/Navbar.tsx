@@ -2,8 +2,10 @@ import { Badge } from "@material-ui/core";
 import { Search, ShoppingCartOutlined } from "@material-ui/icons";
 import styled from "styled-components";
 import { mobile } from "../responsive";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
+import { logout } from "../redux/apiCalls";
+import { useRouter } from "next/router";
 
 const Container = styled.div``;
 
@@ -49,6 +51,7 @@ const Logo = styled.h1`
 const Center = styled.div`
   flex: 1;
   text-align: center;
+  cursor: pointer;
 `;
 const Right = styled.div`
   flex: 1;
@@ -60,15 +63,39 @@ const Right = styled.div`
 `;
 
 const MenuItem = styled.div`
-  font-size: 18px;
+  font-size: 25px;
   cursor: pointer;
-  margin-left: 25px;
+  margin-left: 4rem;
 
   ${mobile({ fontSize: "12px", marginLeft: "10px" })}
 `;
 
 const Navbar = () => {
+
+  const router = useRouter();
+
   const quantity = useSelector((state) => state.cart.quantity);
+
+  const usuarioLogado = useSelector(state => state.user.currentUser);
+
+  let logado :string = 'SIGN IN';
+
+  if(usuarioLogado !== null){
+    logado = 'Sair';
+  }
+
+  const dispatch = useDispatch();
+
+  const handleLogoutClick = (e:any) => {     
+    e.preventDefault();
+    if(usuarioLogado !== null){
+      logout(dispatch);
+    }else{
+      router.push("/Login")
+    }
+    
+  } 
+
 
   return (
     <div>
@@ -81,12 +108,15 @@ const Navbar = () => {
               <Search style={{ color: "gray", fontSize: 18 }} />
             </SearchContainer>
           </Left>
-          <Center>
-            <Logo>CORITIBA</Logo>
-          </Center>
-          <Right>
-            <MenuItem>REGISTER</MenuItem>
-            <MenuItem>SIGN IN</MenuItem>
+          <Link href={"/"}>
+            <Center>
+              <Logo>CORITIBA BASQUETE</Logo>
+            </Center>
+          </Link>
+          <Right>            
+            <MenuItem onClick={handleLogoutClick}>
+              {logado}
+            </MenuItem>
             <Link href={"/Cart"}>
               <MenuItem>
                 <Badge badgeContent={quantity} color="primary">
